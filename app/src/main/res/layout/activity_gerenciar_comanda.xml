@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/base_fundo"
+    tools:context=".view.GerenciarComandaActivity">
+
+    <EditText
+        style="@style/base"
+        android:hint="Informe a mesa"/>
+
+    <Button
+        style="@style/base_button"
+        android:text="Nova Comanda"/>
+
+    <ListView
+        android:id="@+id/lvComanda"
+        style="@style/listView" />
+
+</LinearLayout>

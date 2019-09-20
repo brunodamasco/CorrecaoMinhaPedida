@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/base_fundo"
+    tools:context=".view.AddItemComandaActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Produto" />
+
+    <Spinner
+        android:id="@+id/spProduto"
+        style="@style/spiner">
+
+    </Spinner>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="Quantidade" />
+
+    <NumberPicker
+        android:id="@+id/npQuantidade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"></NumberPicker>
+
+    <Button
+        style="@style/base_button"
+        android:onClick="adicionarItem"
+        android:text="Adicionar" />
+
+    <Button
+        style="@style/base_button"
+        android:onClick="novoProduto"
+        android:text="Novo Produto" />
+
+    <Button
+        style="@style/base_button"
+        android:onClick="cancelar"
+        android:text="Voltar" />
+
+</LinearLayout>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/base_fundo"
+    tools:context=".view.CategoriaActivity">
+
+    <EditText
+        style="@style/base"
+        android:hint="Informe o nome da categoria"
+        android:id="@+id/edNome"/>
+
+    <Button
+        style="@style/base_button"
+        android:text="Salvar"
+        android:onClick="salvarCategoria"/>
+    
+    <ListView
+        android:id="@+id/lvCategoria"
+        style="@style/listView" />
+</LinearLayout>
