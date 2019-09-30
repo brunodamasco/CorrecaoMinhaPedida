@@ -19,5 +19,6 @@ public class CategoriaActivity extends AppCompatActivity {
     }
 
     public void salvarCategoria(View view) {
+        control.salvarAction();
     }
 }

@@ -49,7 +49,7 @@ public class AddItemComandaControl {
         npQuantidade.setMaxValue(Constantes.MAX_QUANTIDADE_ITEM);
     }
 
-    private void configSpinner() {
+    public void configSpinner() {
         try {
             produtoDao.getDao().createIfNotExists(new Produto(1, "Refrigerante", 3.00));
             produtoDao.getDao().createIfNotExists(new Produto(2, "Cerveja", 5.00));

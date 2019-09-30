@@ -1,6 +1,5 @@
 package senac.renato.correcaominhapedida.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -20,16 +19,11 @@ public class ProdutoActivity extends AppCompatActivity {
     }
 
     public void addProduto(View view) {
-        control.enviarItemAction();
+        control.salvarAction();
     }
 
     public void addNovaCategoria(View view) {
         control.addNovaCategoria();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        control.onActivityResult(requestCode, resultCode, data);
-    }
 }

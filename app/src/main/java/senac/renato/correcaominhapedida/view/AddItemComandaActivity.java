@@ -33,6 +33,12 @@ public class AddItemComandaActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        itemComandaControl.configSpinner();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         itemComandaControl.onActivityResult(requestCode, resultCode, data);

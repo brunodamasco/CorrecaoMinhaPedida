@@ -1,9 +1,13 @@
 package senac.renato.correcaominhapedida.model;
 
+import android.content.ClipData;
+
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 @DatabaseTable(tableName = "comanda")
 public class Comanda implements Serializable {
@@ -17,8 +21,8 @@ public class Comanda implements Serializable {
     @DatabaseField(canBeNull = false)
     private String local;
 
-    @DatabaseField(foreign = true, foreignAutoRefresh = true)
-    private ItemComanda itemComanda;
+    @ForeignCollectionField(eager = true)
+    private Collection<ItemComanda> itemComandas;
 
     public Comanda() {
     }
@@ -27,7 +31,6 @@ public class Comanda implements Serializable {
         this.id = id;
         this.mesa = mesa;
         this.local = local;
-        this.itemComanda = itemComanda;
     }
 
     public Integer getId() {
@@ -54,21 +57,17 @@ public class Comanda implements Serializable {
         this.local = local;
     }
 
-    public ItemComanda getItemComanda() {
-        return itemComanda;
+    public Collection<ItemComanda> getItemComandas() {
+        return itemComandas;
     }
 
-    public void setItemComanda(ItemComanda itemComanda) {
-        this.itemComanda = itemComanda;
+    public void setItemComandas(Collection<ItemComanda> itemComandas) {
+        this.itemComandas = itemComandas;
     }
 
     @Override
     public String toString() {
-        return "Comanda{" +
-                "id=" + id +
-                ", mesa=" + mesa +
-                ", local='" + local + '\'' +
-                ", itemComanda=" + itemComanda +
-                '}';
+        return "Comanda: " + id + " - mesa: " + mesa +
+                " - local: " + local;
     }
 }

@@ -1,9 +1,11 @@
 package senac.renato.correcaominhapedida.model;
 
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 import java.io.Serializable;
 
+@DatabaseTable(tableName = "itemcomanda")
 public class ItemComanda implements Serializable {
     @DatabaseField(allowGeneratedIdInsert = true, generatedId = true)
     private Integer id;
@@ -11,10 +13,21 @@ public class ItemComanda implements Serializable {
     @DatabaseField(foreign = true, foreignAutoRefresh = true)
     private Produto produto;
 
+    @DatabaseField(foreign = true, foreignAutoRefresh = true)
+    private Comanda comanda;
+
     @DatabaseField(canBeNull = false)
     private int quantidade;
 
     public ItemComanda() {
+    }
+
+    public Comanda getComanda() {
+        return comanda;
+    }
+
+    public void setComanda(Comanda comanda) {
+        this.comanda = comanda;
     }
 
     public ItemComanda(Produto produto, int quantidade) {

@@ -17,7 +17,7 @@ import senac.renato.correcaominhapedida.model.Produto;
 public class MyOrmLiteHelper extends OrmLiteSqliteOpenHelper {
 
     private static final String DATABASE_NAME = "minha_pedida.db";
-    private static final int DATABASE_VERSION = 18;
+    private static final int DATABASE_VERSION = 22;
 
     public MyOrmLiteHelper(Context c) {
         super(c, DATABASE_NAME, null, DATABASE_VERSION);

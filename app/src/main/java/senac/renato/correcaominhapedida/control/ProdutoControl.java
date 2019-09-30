@@ -1,16 +1,20 @@
 package senac.renato.correcaominhapedida.control;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import senac.renato.correcaominhapedida.R;
@@ -18,7 +22,6 @@ import senac.renato.correcaominhapedida.dao.CategoriaDao;
 import senac.renato.correcaominhapedida.dao.ProdutoDao;
 import senac.renato.correcaominhapedida.model.Categoria;
 import senac.renato.correcaominhapedida.model.Produto;
-import senac.renato.correcaominhapedida.uteis.Constantes;
 import senac.renato.correcaominhapedida.view.CategoriaActivity;
 
 public class ProdutoControl {
@@ -58,9 +61,6 @@ public class ProdutoControl {
 
     private void configSpinnerCategoria() {
         try {
-            categoriaDao.getDao().createIfNotExists(new Categoria(1, "Alimentos"));
-            categoriaDao.getDao().createIfNotExists(new Categoria(2, "Bebidas"));
-            categoriaDao.getDao().createIfNotExists(new Categoria(3, "Diversos"));
             listCategoria = categoriaDao.getDao().queryForAll();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -74,20 +74,24 @@ public class ProdutoControl {
     }
 
     private void configListViewProduto() {
-        listProduto = new ArrayList<>();
-        adapterProduto = new ArrayAdapter<>(
-                activity,
-                android.R.layout.simple_spinner_dropdown_item,
-                listProduto
-        );
-        lvProduto.setAdapter(adapterProduto);
-        cliqueCurto();
-        cliqueLongo();
+        try {
+            listProduto = produtoDao.getDao().queryForAll();
+            adapterProduto = new ArrayAdapter<>(
+                    activity,
+                    android.R.layout.simple_spinner_dropdown_item,
+                    listProduto
+            );
+            lvProduto.setAdapter(adapterProduto);
+            cliqueCurto();
+            cliqueLongo();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void addNovaCategoria() {
         Intent it = new Intent(activity, CategoriaActivity.class);
-        activity.startActivityForResult(it, Constantes.REQUEST_CATEGORIA);
+        activity.startActivity(it);
     }
 
     private Produto getDadosForm() {
@@ -98,71 +102,88 @@ public class ProdutoControl {
         return p;
     }
 
-    public void enviarItemAction() {
-        Produto produto = getDadosForm();
-        Intent it = new Intent();
-        it.putExtra(Constantes.PARAM_PRODUTO, produto);
-        activity.setResult(activity.RESULT_OK, it);
-        activity.finish();
-    }
-
     private void cliqueCurto() {
-        /*lvProduto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lvProduto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 produto = adapterProduto.getItem(position);
-                dialogAddMaisUm(produto);
-            }
-        });*/
-    }
-
-    private void dialogAddMaisUm(final Produto prod){
-        /*AlertDialog.Builder alerta = new AlertDialog.Builder(activity);
-        alerta.setTitle("Mostrando item");
-        alerta.setMessage("Adicionar ou remover Produto");
-        alerta.setPositiveButton("Adicionar Produto", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                prod.addQuantidade();
-                adapterItemComanda.notifyDataSetChanged();
-                itemComanda = null;
-                atualizarTvTotal();
-            }
-        });
-        alerta.setNegativeButton("Remover Produto", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                prod.removeQuantidade();
-                adapterItemComanda.notifyDataSetChanged();
-                if(item.getQuantidade()==0){
-                    adapterItemComanda.remove(prod);
-                }
-                itemComanda = null;
-                atualizarTvTotal();
+                AlertDialog.Builder alerta = new AlertDialog.Builder(activity);
+                alerta.setTitle("Visualizando produto");
+                alerta.setMessage(produto.toString());
+                alerta.setNegativeButton("Fechar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        produto = null;
+                    }
+                });
+                alerta.setPositiveButton("Editar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        carregarForm(produto);
+                    }
+                });
+                alerta.show();
             }
         });
-        alerta.setNeutralButton("Fechar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                itemComanda = null;
-            }
-        });
-        alerta.show();*/
     }
 
     private void cliqueLongo() {
+        lvProduto.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                produto = adapterProduto.getItem(position);
+                AlertDialog.Builder alerta = new AlertDialog.Builder(activity);
+                alerta.setTitle("Excluindo produto");
+                alerta.setMessage(produto.toString());
+                alerta.setNegativeButton("Fechar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        produto = null;
+                    }
+                });
+                alerta.setPositiveButton("Excluir", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            if(produtoDao.getDao().delete(produto)>0){
+                                adapterProduto.remove(produto);
+                            }
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                alerta.show();
+                return true;
+            }
+        });
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == activity.RESULT_OK){
-            if(requestCode==Constantes.REQUEST_PRODUTO){
-                Produto item = (Produto) data.getSerializableExtra(Constantes.PARAM_PRODUTO);
-                adapterProduto.add(item);
-                //atualizarTvTotal();
-            }
-        } else if(resultCode==activity.RESULT_CANCELED){
-            Toast.makeText(activity, "Ação cancelada", Toast.LENGTH_SHORT).show();
+    public void salvarAction(){
+        if(produto==null){
+            produto = getDadosForm();
+        } else {
+            Produto p = getDadosForm();
+            produto.setNome(p.getNome());
+            produto.setValor(p.getValor());
         }
+
+        try {
+            Dao.CreateOrUpdateStatus res = produtoDao.getDao().createOrUpdate(produto);
+            if(res.isCreated()){
+                adapterProduto.add(produto);
+            }else if(res.isUpdated()){
+                adapterProduto.notifyDataSetChanged();
+            }
+            produto = null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void carregarForm(Produto p){
+        edproduto.setText(p.getNome());
+        edValor.setText(String.valueOf(p.getValor()));
     }
 
 }

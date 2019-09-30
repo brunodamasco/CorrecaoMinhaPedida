@@ -6,11 +6,18 @@
 
     <EditText
         style="@style/base"
-        android:hint="Informe a mesa"/>
+        android:hint="Informe a mesa"
+        android:id="@+id/editMesa"/>
+
+    <EditText
+        style="@style/base"
+        android:hint="Informe o local"
+        android:id="@+id/editLocal"/>
 
     <Button
         style="@style/base_button"
-        android:text="Nova Comanda"/>
+        android:text="Nova Comanda"
+        android:onClick="novaComanda"/>
 
     <ListView
         android:id="@+id/lvComanda"
